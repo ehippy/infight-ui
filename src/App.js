@@ -1,23 +1,33 @@
 import React, {Component} from 'react';
 import './App.css';
+let jwtDecode = require('jwt-decode');
 
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            loggedIn: localStorage.getItem('infight_jwt') !== undefined
-        };
 
         let url = new URL(window.location.href);
-        let c = url.searchParams.get("cookie");
-        console.log(c);
+        let cookieValie = url.searchParams.get("cookie");
+        console.log(cookieValie);
 
-        if (c) {
-            localStorage.setItem('infight_jwt', c);
+        if (cookieValie) {
+            localStorage.setItem('infight_jwt', cookieValie);
             window.location.href = url.origin;
         }
+
+        let userDetails = null;
+        if (localStorage.getItem('infight_jwt')) {
+
+            userDetails = jwtDecode(localStorage.getItem('infight_jwt'));
+            console.log(userDetails);
+        }
+
         this.logOut = this.logOut.bind(this);
 
+        this.state = {
+            loggedIn: localStorage.getItem('infight_jwt') !== undefined,
+            user: userDetails
+        };
     }
 
     render() {
@@ -46,8 +56,8 @@ class App extends Component {
 
         if (this.state.loggedIn) {
             return (
-                <div>
-                    <div>U R LOGGED</div>
+                <div className="float-right">
+                    <div>{this.state.user.user_name}</div>
                     <a onClick={this.logOut}>Log Out</a>
                 </div>
             )
