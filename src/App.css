@@ -2,9 +2,25 @@
 
 }
 
-
 .App-header {
-  background-color: #6c6c6c;
-  padding: 10px;
-  color: white;
+    background-color: #6c3031;
+    padding: 10px;
+    color: white;
+}
+
+.AppLogOut {
+    font-size:xx-small;
+    display:block;
+}
+
+.User-header-img {
+    height: 60px;
+    width: 60px;
+    float: left;
+    border-radius: 12px;
+    margin-right: 8px;
+}
+.HeaderTeamName {
+    font-size:small;
+    display:block;
 }

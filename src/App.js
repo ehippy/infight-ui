@@ -57,8 +57,12 @@ class App extends Component {
         if (this.state.loggedIn) {
             return (
                 <div className="float-right">
-                    <div>{this.state.user.user_name}</div>
-                    <a onClick={this.logOut}>Log Out</a>
+                    <div>
+                        <img className="User-header-img" src={this.state.user.user_img} />
+                        <span>{this.state.user.user_name}</span>
+                        <span className="HeaderTeamName">{this.state.user.team_domain}</span>
+                        <a onClick={this.logOut} className="AppLogOut">Log Out</a>
+                    </div>
                 </div>
             )
         } else {
