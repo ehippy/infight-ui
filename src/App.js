@@ -1,17 +1,45 @@
 import React, {Component} from 'react';
 import './App.css';
+import logo from './infight.svg'
+
 let jwtDecode = require('jwt-decode');
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        let url = new URL(window.location.href);
-        let cookieValie = url.searchParams.get("cookie");
-        console.log(cookieValie);
+        let initialState = {
+            mustAddToSlack: false
+        };
 
-        if (cookieValie) {
-            localStorage.setItem('infight_jwt', cookieValie);
+        this.state = this.checkLogin(initialState);
+        this.logOut = this.logOut.bind(this);
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <div className="row App-header">
+                    <div className="col"><img src={logo} className="HeaderLogo" alt="infight"/> infight</div>
+                    <div className="col">
+                        {this.identityUI()}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        {this.teamUI()}
+                    </div>
+                </div>
+            </div>
+
+        );
+    }
+
+    checkLogin(initialState) {
+        let url = new URL(window.location.href);
+        let cookieValue = url.searchParams.get("cookie");
+        if (cookieValue) {
+            localStorage.setItem('infight_jwt', cookieValue);
             window.location.href = url.origin;
         }
 
@@ -22,34 +50,51 @@ class App extends Component {
             console.log(userDetails);
         }
 
-        this.logOut = this.logOut.bind(this);
+        initialState['loggedIn'] = localStorage.getItem('infight_jwt') !== null;
+        initialState['user'] = userDetails;
 
-        this.state = {
-            loggedIn: localStorage.getItem('infight_jwt') !== undefined,
-            user: userDetails
-        };
+        if (userDetails !== null){
+            let app = this;
+            if (!localStorage.getItem('foundTeam')) {
+                fetch(App.getApiBase() + "/" + userDetails.team_domain + "/exists")
+                    .then(response => {
+                        console.log(response);
+                        if (response.ok) {
+                            response.json().then(foundTeam => {
+                                app.setState({mustAddToSlack: !foundTeam});
+                                if (foundTeam) {
+                                    localStorage.setItem('foundTeam', true)
+                                }
+                            });
+                        }
+                    });
+            }
+        }
+
+        return initialState;
     }
 
-    render() {
-        return (
-            <div className="container">
-                <div className="row App-header">
-                    <div className="col">infight</div>
-                    <div className="col">
-                        {this.identityUI()}
-                    </div>
-                </div>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.js</code> and save to reload. brah!
-                </p>
-            </div>
-
-        );
-    }
 
     logOut() {
         localStorage.removeItem('infight_jwt');
+        localStorage.removeItem('foundTeam');
         this.setState({loggedIn: false});
+    }
+
+    teamUI() {
+        if (this.state.mustAddToSlack) {
+            return (
+                <div className="alert alert-info alert-dismissible fade show" role="alert">
+                    <h3>Hey first timer!</h3>
+                    <strong>You're the first one here!</strong> We need to install infight into your slack team
+                    by clicking this button.
+
+                    <div>
+                        <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands,bot&client_id=134879189280.222167489812"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+                    </div>
+                </div>
+            )
+        }
     }
 
     identityUI() {
@@ -58,7 +103,7 @@ class App extends Component {
             return (
                 <div className="float-right">
                     <div>
-                        <img className="User-header-img" src={this.state.user.user_img} />
+                        <img className="User-header-img" src={this.state.user.user_img} alt={this.state.user.user_name}/>
                         <span>{this.state.user.user_name}</span>
                         <span className="HeaderTeamName">{this.state.user.team_domain}</span>
                         <a onClick={this.logOut} className="AppLogOut">Log Out</a>
@@ -76,6 +121,10 @@ class App extends Component {
             )
         }
 
+    }
+
+    static getApiBase() {
+        return "http://localhost:8000"
     }
 }
 
