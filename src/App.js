@@ -35,12 +35,16 @@ class App extends Component {
         );
     }
 
+    getBaseUrl() {
+        return new URL(window.location.href).origin;
+    }
+
     checkLogin(initialState) {
         let url = new URL(window.location.href);
         let cookieValue = url.searchParams.get("cookie");
         if (cookieValue) {
             localStorage.setItem('infight_jwt', cookieValue);
-            window.location.href = url.origin;
+            window.location.href = this.getBaseUrl();
         }
 
         let userDetails = null;
@@ -56,7 +60,9 @@ class App extends Component {
         if (userDetails !== null){
             let app = this;
             if (!localStorage.getItem('foundTeam')) {
-                fetch(App.getApiBase() + "/" + userDetails.team_domain + "/exists")
+                fetch(App.getApiBase() + "/" + userDetails.team_domain + "/exists", {
+                    headers: {'Authorization': 'Basic ' + localStorage.getItem('infight_jwt')}
+                })
                     .then(response => {
                         console.log(response);
                         if (response.ok) {
@@ -85,13 +91,12 @@ class App extends Component {
         if (this.state.mustAddToSlack) {
             return (
                 <div className="alert alert-info alert-dismissible fade show" role="alert">
-                    <h3>Hey first timer!</h3>
-                    <strong>You're the first one here!</strong> We need to install infight into your slack team
-                    by clicking this button.
+                    <strong>You're the first one here!</strong> We need to install infight into your slack team.
 
-                    <div>
-                        <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands,bot&client_id=134879189280.222167489812"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
-                    </div>
+                    <a href={"https://slack.com/oauth/authorize?scope=incoming-webhook,commands,bot&client_id=134879189280.222167489812&redirect_uri=" + encodeURIComponent(App.getApiBase() + '/install')}>
+                        <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png"
+                             srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+                    </a>
                 </div>
             )
         }
