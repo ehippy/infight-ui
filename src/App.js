@@ -26,7 +26,7 @@ class App extends Component {
     siteHome = () => (
         <div className="col">
             <h2>Welcome to infight</h2>
-            <p>Have you ever wanted to conspire against your teammates?</p>
+            <p>Have you ever wanted to conspire against your teammates? {process.env.REACT_APP_API_BASE}</p>
         </div>
     );
 
@@ -180,7 +180,7 @@ class App extends Component {
     }
 
     static getApiBase() {
-        return "http://localhost:8000"
+        return process.env.REACT_APP_API_BASE
     }
 }
 
