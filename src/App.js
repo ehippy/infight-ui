@@ -26,17 +26,20 @@ class App extends Component {
     siteHome = () => (
         <div className="col">
             <h2>Welcome to infight</h2>
+            <p>Have you ever wanted to conspire against your teammates?</p>
         </div>
     );
 
-    teamHome = ({match}) => (
+    teamHome = ({match}) => {
+
+        return (
         <div className="row">
             <div className="col">
                 <h2>{match.params.team_domain}</h2>
                 {this.teamUI()}
             </div>
         </div>
-    );
+    )};
 
     render() {
         return (
