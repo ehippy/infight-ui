@@ -16,3 +16,4 @@ deploy:
   acl: private
   on:
     repo: ehippy/infight-ui
+  skip_cleanup: true
