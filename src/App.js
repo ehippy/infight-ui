@@ -47,7 +47,7 @@ class App extends Component {
                 <div className="container">
                     <div className="row App-header">
                         <div className="col">
-                            <Link to="/"><img src={logo} className="HeaderLogo" alt="infight"/> infight</Link>
+                            <Link to="/"><img src={logo} className="HeaderLogo" alt="infight"/></Link>
                         </div>
                         <div className="col">
                             {this.identityUI()}
