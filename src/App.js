@@ -168,7 +168,7 @@ class App extends Component {
             )
         } else {
             return (
-                <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.team,identity.avatar&client_id=134879189280.222167489812"
+                <a href={"https://slack.com/oauth/authorize?scope=identity.basic,identity.team,identity.avatar&client_id=134879189280.222167489812&redirect_uri=" + encodeURIComponent(App.getApiBase() + '/auth')}
                    className="float-right">
                     <img alt="Sign in with Slack" height="40" width="172"
                          src="https://platform.slack-edge.com/img/sign_in_with_slack.png"
