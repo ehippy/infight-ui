@@ -13,6 +13,7 @@ deploy:
     secure: kzrnS+Jfg8m4b4SnRi0wCkziGqmuWrC0o7VCwsDuh4Swhapv+YYOb/YVHkBzAqrWRwH8Z3eM/Ur+AEFWRPNGc3DBfHu7OET1Sz6zkCuRQSpxPxVGbZHLbzl+mI3qqZVbIUHtJ00w4/eVODdSPP+BHjS3ikJ2dXcVDGebPRehrw11Dk1eFOSSaPgsXYv3QlUqCURd4EhmuhJCO0VH6MTtJ7SAZjJF+LFxqtF+QxXXgQSXUUN2ZQu38MA0wVUuT0W38IDgIupb0W1bEqBQBPmIFcKKryQMcaFaEINcOOvXIudcQRNvjWPRDq7mD8Q8fm3N3tDcpk200Vj/YI4AWSYSYzM0k0qhdR+JDUQC6G44RSEOTZsf/aL4FdGKRLZ7CmnXnh14e4dVCZ1Nv2RFrlJKcoufQtwo/75g8oPMTZtQ5WxKuY7MugjDnUDuuxi+odiVEbv0MlIIH3KrRj9JfSK1ZMx4+TeWy253INzu9ANsEku9SVuUOEOCLm8cFAyMwqWGjvwVqbE8m7idDnw6t2nY0olleYlo3EMU8l+tqTSJDTZC4j0rBRkVqKPNCaQ71jh8/WAjVwBQXZtuztTtemB8cSiqQEU7J4DfYdENOmKowb4yenDGlYBTAlgKdgZVqHW9PrT323AXMTLwfTA11uhooqHuHvDkJb9xr7PiePLyq+0=
   bucket: infightio
   local-dir: build
+  cache_control: "max-age=60"
   acl: public_read
   on:
     repo: ehippy/infight-ui
